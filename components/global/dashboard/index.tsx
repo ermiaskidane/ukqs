@@ -45,14 +45,14 @@ const Dashboard = () => {
               id="csv-import"
               onChange={(e) => handleImportCSV(e)}
             />
-            <Button variant="outline" onClick={() => document.getElementById('csv-import')?.click()}>
+            <Button variant="outline" className="cursor-pointer" onClick={() => document.getElementById('csv-import')?.click()}>
               <Download className="mr-2 h-4 w-4" /> Import CSV
             </Button>
-            <Button variant="default" onClick={handleExportCSV}>
+            <Button variant="default" className="cursor-pointer" onClick={handleExportCSV}>
               <Download className="mr-2 h-4 w-4" /> Export CSV
             </Button>
             <Link href="/admin/certificates/new" className="w-full md:w-auto">
-              <Button className="w-full">
+              <Button className="w-full cursor-pointer">
                 <Plus className="mr-2 h-4 w-4" /> Add Certificate
               </Button>
             </Link>
@@ -107,7 +107,7 @@ const Dashboard = () => {
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">
                           <Link href={`/admin/certificates/new?id=${certificate.id}`}>
-                            <Button variant="ghost" size="icon">
+                            <Button variant="ghost" size="icon" className="cursor-pointer">
                               <Edit className="h-4 w-4" />
                               <span className="sr-only">Edit</span>
                             </Button>
@@ -115,6 +115,7 @@ const Dashboard = () => {
                           <Button 
                             variant="ghost" 
                             size="icon"
+                            className="cursor-pointer"
                             onClick={() => handleDelete(certificate.id)}
                           >
                             <Trash2 className="h-4 w-4" />

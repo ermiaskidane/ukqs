@@ -50,7 +50,7 @@ const VerifyForm = () => {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full" disabled={isVerifyingCertificate}>
+                <Button type="submit" className="w-full cursor-pointer" disabled={isVerifyingCertificate}>
                   {isVerifyingCertificate ? "Verifying..." : "Submit"}
                 </Button>
               </form>

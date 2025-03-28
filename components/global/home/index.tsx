@@ -27,15 +27,15 @@ const Home = ({ session }: { session: any }) => {
         </div>
         <div className="space-x-4">
           <Link href="/verify">
-            <Button>Verify Certificate</Button>
+            <Button className="cursor-pointer">Verify Certificate</Button>
           </Link>
           {session ? (
             <Link href="/admin/dashboard">
-              <Button variant="outline">Admin Dashboard</Button>
+              <Button variant="outline" className="cursor-pointer">Admin Dashboard</Button>
             </Link>
           ): (
             <Link href="/sign-in">
-              <Button variant="outline">Admin Login</Button>
+              <Button variant="outline" className="cursor-pointer">Admin Login</Button>
             </Link>
           )}
           {/* {(user?.user?.role === "ADMIN" || user?.user?.role === "AGENT") && (

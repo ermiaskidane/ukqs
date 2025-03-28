@@ -29,7 +29,7 @@ const StudentCertificate = ({ params }: CertificateProps) => {
         <div className="max-w-3xl mx-auto text-center">
           <h1 className="text-2xl font-bold">Certificate not found</h1>
           <p className="mt-2 text-gray-500">The certificate you are looking for does not exist.</p>
-          <Button className="mt-4" onClick={() => router.push("/verify")}>
+          <Button className="mt-4 cursor-pointer" onClick={() => router.push("/verify")}>
             Go back to verification
           </Button>
         </div>
@@ -40,10 +40,10 @@ const StudentCertificate = ({ params }: CertificateProps) => {
   return (
     <div className="max-w-3xl mx-auto">
         <div className="flex justify-between items-center mb-6">
-          <Button variant="outline" onClick={() => router.push("/verify")}>
+          <Button variant="outline" className="cursor-pointer" onClick={() => router.push("/verify")}>
             <ArrowLeft className="mr-2 h-4 w-4" /> Back to verification
           </Button>
-          <Button onClick={handleDownload}>
+          <Button className="cursor-pointer" onClick={handleDownload}>
             <Download className="mr-2 h-4 w-4" /> Download PDF
           </Button>
         </div>

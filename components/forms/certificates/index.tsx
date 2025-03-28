@@ -56,7 +56,7 @@ const CertificateForm = () => {
     <div className="w-full px-4 sm:px-6">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">{isEditMode ? "Edit Certificate" : "Add New Certificate"}</h1>
-        <Button variant="outline" onClick={() => router.push("/admin/dashboard")}>
+        <Button variant="outline" className="cursor-pointer" onClick={() => router.push("/admin/dashboard")}>
           Cancel
         </Button>
       </div>
@@ -268,10 +268,10 @@ const CertificateForm = () => {
             </div>
 
             <div className="flex justify-end gap-2">
-              <Button type="button" variant="outline" onClick={() => router.push("/admin/dashboard")}>
+              <Button type="button" variant="outline" className="cursor-pointer"  onClick={() => router.push("/admin/dashboard")}>
                 Cancel
               </Button>
-              <Button type="submit" disabled={isCreatingCertificate || isUpdatingCertificate}>
+              <Button type="submit" disabled={isCreatingCertificate || isUpdatingCertificate} className="cursor-pointer"  >
                 {isEditMode ? "Update certificate" : "Create Certificate"}
               </Button>
             </div>
