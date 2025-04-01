@@ -23,9 +23,7 @@ export default async function HomePage() {
   return (
     <HydrationBoundary state={dehydrate(client)}>
       <main className="flex-1">
-        <section className="w-full py-12 bg-gray-200">
-          <Home session={session?.user} />
-        </section>
+        <Home session={session?.user} />
       </main>
     </HydrationBoundary>      
   )
