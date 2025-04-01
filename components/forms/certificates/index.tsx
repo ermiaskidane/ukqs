@@ -13,7 +13,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { cn } from "@/lib/utils"
 import { useCertificates } from '@/hooks/certificates'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { DateOfBirthPicker } from '@/components/global/date-picker'
+import DatePicker from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css"
 
 
 const CertificateForm = () => {
@@ -52,11 +53,14 @@ const CertificateForm = () => {
     }
   }, [isEditMode, certificateId, loadCertificateData, resetForm])
 
+  const eighteenYearsAgo = new Date(new Date().getFullYear() - 18, new Date().getMonth(), new Date().getDate())
+  const maxDate = new Date(new Date().getFullYear() - 120, new Date().getMonth(), new Date().getDate())
+
   return (
     <div className="w-full px-4 sm:px-6">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">{isEditMode ? "Edit Certificate" : "Add New Certificate"}</h1>
-        <Button variant="outline" className="cursor-pointer" onClick={() => router.push("/admin/dashboard")}>
+        <Button variant="outline" onClick={() => router.push("/admin/dashboard")}>
           Cancel
         </Button>
       </div>
@@ -128,11 +132,39 @@ const CertificateForm = () => {
                   <FormItem className="flex flex-col">
                     <FormLabel>Date of Birth</FormLabel>
                     <FormControl>
-                      <DateOfBirthPicker 
+                    <div className="relative">
+                      <DatePicker
+                        selected={field.value}
+                        onChange={(date: Date) => field.onChange(date)}
+                        showYearDropdown
+                        scrollableYearDropdown
+                        yearDropdownItemNumber={100}
+                        showMonthDropdown
+                        dateFormat="MMMM d, yyyy"
+                        maxDate={eighteenYearsAgo}
+                        minDate={maxDate}
+                        placeholderText="Select your birth date"
+                        className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        wrapperClassName="w-full"
+                        popperClassName="react-datepicker-right"
+                        customInput={
+                          <div className="flex w-full cursor-pointer items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+                            <input
+                              value={field.value ? format(field.value, "MMMM d, yyyy") : ""}
+                              className="flex-1 bg-transparent outline-none placeholder:text-muted-foreground"
+                              placeholder="Select your birth date"
+                              readOnly
+                            />
+                            <CalendarIcon className="h-4 w-4 opacity-50" />
+                          </div>
+                        }
+                      />
+                    </div>
+                      {/* <DateOfBirthPicker 
                         value={field.value} 
                         onChange={field.onChange} 
                         disabled={isCreatingCertificate || isUpdatingCertificate} 
-                      />
+                      /> */}
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -268,15 +300,17 @@ const CertificateForm = () => {
             </div>
 
             <div className="flex justify-end gap-2">
-              <Button type="button" variant="outline" className="cursor-pointer"  onClick={() => router.push("/admin/dashboard")}>
+              <Button type="button" variant="outline" onClick={() => router.push("/admin/dashboard")}>
                 Cancel
               </Button>
-              <Button type="submit" disabled={isCreatingCertificate || isUpdatingCertificate} className="cursor-pointer"  >
+              <Button type="submit" disabled={isCreatingCertificate || isUpdatingCertificate}>
                 {isEditMode ? "Update certificate" : "Create Certificate"}
               </Button>
             </div>
           </form>
         </Form>
+
+        {/* <BirthDateForm /> */}
       </div>
     </div>
   )
