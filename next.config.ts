@@ -8,6 +8,13 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        hostname: "ukqs.org.uk",
+      },
+    ],
+  },
 };
 
 export default nextConfig;
