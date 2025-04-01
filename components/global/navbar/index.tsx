@@ -52,9 +52,7 @@ const Navbar = ({ currentUser }: NavbarProps) => {
     <header className="border-b">
         <div className="flex h-16 items-center justify-between px-4 sm:px-6">
           <Link href="/" className="flex items-center gap-2">
-            <Image src="/logo.png" alt="UKQS Logo" className="h-10 w-auto" width={100} height={100} />
-            {/* <img src="/logo.png" alt="UKQS Logo" className="h-10 w-auto" /> */}
-            <span className="text-xl font-bold text-blue-900">UKQS</span>
+            <Image src="https://ukqs.org.uk/wp-content/uploads/2025/02/cropped-ukqslogo-191x64.jpg" alt="UKQS Logo" className="h-10 w-auto" width={100} height={100} />
           </Link>
           <nav className="hidden sm:flex gap-6">
             <Link href="/" className={cn("text-sm font-medium hover:underline", pathname === "/" && "text-rose-500")}>
