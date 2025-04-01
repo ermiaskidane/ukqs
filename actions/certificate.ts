@@ -196,3 +196,36 @@ export const onCreateCertificate = async (data: CertificateFormSchema) => {
   }
 }
 
+export const onCreateManyCertificate = async (data: CertificateFormSchema[]) => {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers()
+    })  
+
+    if (!session?.user) return { status: 404, message: "Session not found" };
+
+    const userRole = await client.user.findUnique({
+      where: {
+        id: session.user.id
+      },
+      select: { 
+        role: true
+      }
+    })
+
+    if (userRole?.role !== "ADMIN" && userRole?.role !== "AGENT") return { status: 403, message: "Unauthorized" } 
+    
+    const createdCertificates = await client.certificate.createMany({
+      data: data.map(certificate => ({
+        ...certificate,
+        userId: session.user.id
+      }))
+    })  
+
+    return { status: 200, message: "Certificates created successfully" }
+  } catch (error) {
+    console.error("Error creating certificates:", error)
+    return { status: 400, message: "Failed to create certificates" }
+  }
+}
+
