@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react"
 import { Certificate } from "@/types/certificate"
-import { onDeleteCertificate, onGetCertificates } from "@/actions/certificate"
-import { QueryClient, useQuery } from "@tanstack/react-query"
+import { onCreateCertificate, onDeleteCertificate, onGetCertificates, onCreateManyCertificate    } from "@/actions/certificate"
+import { QueryClient, useMutation, useQuery } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
+import { CertificateFormSchema } from "@/components/forms/certificates/schema"
 
 export const useDashboard = () => {
   const router = useRouter()
@@ -23,20 +24,6 @@ export const useDashboard = () => {
     queryFn: () => onGetCertificates(),
   })
 
-  // Not neccecary to show toast for fetching certificates
-  // useEffect(() => {
-  //   if (isSuccess) {
-  //     toast.success("Success", {
-  //       description: certificates?.message || "Certificates loaded successfully",
-  //     });
-  //   }
-
-  //   if (isError) {
-  //     toast.error("Error", {
-  //       description: certificates?.message || "Failed to load certificates",
-  //     });
-  //   }
-  // }, [isSuccess, isError, certificates?.message]);
 
   const handleDelete = (id: string) => {
     setIsDeleteModalOpen(true)
@@ -101,13 +88,37 @@ export const useDashboard = () => {
     // const response = await onDeleteCertificate(selectedCertificateId)
   }
 
+  const { mutate: createManyMutation, isPending: isCreatingCertificate } = useMutation({
+    mutationKey: ["createMany-certificate"],
+    mutationFn: async (data: CertificateFormSchema[]) => {
+      return await onCreateManyCertificate(data)
+    },
+    onSuccess: (data) => {
+      if (data?.status === 200) {
+        toast.success("Success", {
+          description: data?.message || "Certificate created successfully",
+        })
+        router.push('/admin/dashboard')
+      } else {
+        toast.error("Error", {
+          description: data?.message || "Failed to create Certificate",
+        })
+      }
+    },
+    onSettled: async () => {
+      return await queryClient.invalidateQueries({
+        queryKey: ["get-certificates"],
+      })
+    },
+  }) 
+
   const handleImportCSV = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     try {
       const text = await file.text();
-      console.log("Raw CSV text:", text);
+      // console.log("Raw CSV text:", text);
 
       // Split by newlines and handle different line endings
       const rows = text
@@ -169,28 +180,41 @@ export const useDashboard = () => {
 
       // Transform data to match API format
       const certificates = data.map(row => {
-        const rowData: Record<string, string> = {
-          id: row[0],
-          certificatenumber: row[1],
-          candidatename: row[2],
-          learnerreferencenumber: row[3],
-          centrename: row[4],
-          centreno: row[5],
-          coursetitle: row[6],
-          level: row[7],
-          country: row[8],
-          dateofbirth: row[9],
-          awarddate: row[10],
-          createdat: row[11],
-          updatedat: row[12],
-          userid: row[13],
-          username: row[14],
-          email: row[15]
+        // Parse dates from the CSV format (DD/MM/YYYY, HH:mm:ss)
+        const parseDate = (dateStr: string) => {
+          const [datePart, timePart] = dateStr.split(', ');
+          const [day, month, year] = datePart.split('/');
+          const [hours, minutes, seconds] = timePart ? timePart.split(':') : ['00', '00', '00'];
+          
+          // Create and return Date object
+          return new Date(
+            parseInt(year),
+            parseInt(month) - 1, // months are 0-based in JavaScript
+            parseInt(day),
+            parseInt(hours),
+            parseInt(minutes),
+            parseInt(seconds)
+          );
         };
-        return rowData;
+
+        return {
+          centreNo: row[5],
+          centreName: row[4],
+          country: row[8],
+          candidateName: row[2],
+          dateOfBirth: parseDate(row[9]),
+          courseTitle: row[6],
+          level: row[7],
+          awardDate: parseDate(row[10]),
+          certificateNumber: row[1],
+          learnerReferenceNumber: row[3],
+          userId: row[13]
+        };
       });
 
       console.log("Transformed certificates:", certificates);
+
+      await createManyMutation(certificates)
       
       if (certificates.length === 0) {
         toast.error("No valid data found", {
