@@ -8,7 +8,7 @@ import VerifyForm from '@/components/forms/verifyForm'
 
 export default function VerifyPage() {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col py-12 md:px-6">
       <main className="flex-1 px-4 py-12 md:px-6">
         <div className="mx-auto max-w-md space-y-6">
           <div className="space-y-2 text-center">
