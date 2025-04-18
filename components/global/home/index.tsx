@@ -23,13 +23,13 @@ const Home = ({ session }: { session: any }) => {
           {/* Background image with opacity - using Next.js Image for better performance */}
           <div className="absolute inset-0 z-0">
             <Image
-              src="/hero-background.png"
+              src="/hero1.jpg"
               alt="Graduation ceremony"
               fill
               style={{
                 objectFit: "cover",
                 objectPosition: "center",
-                opacity: 0.6,
+                opacity: 1,
               }}
               priority
             />
